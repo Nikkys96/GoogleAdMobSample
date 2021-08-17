@@ -13,9 +13,6 @@ namespace Scripts.Advertising
 
         public static AdvertisingViewer Singleton { get; private set; }
 
-        public bool IsAdReady(AdType adType) =>
-            IsEditor() || _currentService != null && _currentService.IsSupportAndReady(adType);
-
         private AdvertisingServiceBase _currentService;
 
         private void Awake()
@@ -48,15 +45,8 @@ namespace Scripts.Advertising
         private void InitService(AdvertisingServiceBase adService)
         {
             Debug.Log($"AdvertisingViewer: InitService service: {adService.name}");
-            adService.Init(SuccessCalback);
+            adService.Init();
         }
-
-        private void SuccessCalback()
-        {
-            Debug.Log($"AdvertisingViewer: Сервис инициализирован");
-            OnSuccessInit?.Invoke();
-        }
-
 
         public void ShowSkipping(Action successCallback, Action exceptionCallback = null) =>
             ShowAdvertising(successCallback, exceptionCallback, AdType.Skippable);
@@ -84,23 +74,14 @@ namespace Scripts.Advertising
                 return;
             }
 
-            Debug.Log($"AdvertisingViewer: currentService.Name: {_currentService.Name}");
-            if (_currentService.IsSupportAndReady(adType))
+            switch (adType)
             {
-                switch (adType)
-                {
-                    case AdType.Skippable:
-                        _currentService.ShowSkipping(successCallback);
-                        break;
-                    case AdType.Rewarded:
-                        _currentService.Show(successCallback);
-                        break;
-                }
-            }
-            else
-            {
-                Debug.LogError($"AdvertisingViewer: currentService.Name {_currentService.Name} is not ready");
-                exceptionCallback?.Invoke();
+                case AdType.Skippable:
+                    _currentService.ShowInterstitialAd();
+                    break;
+                case AdType.Rewarded:
+                    _currentService.ShowRewardedAd();
+                    break;
             }
         }
 

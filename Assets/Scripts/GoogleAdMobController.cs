@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 
-public class GoogleAdMobController : MonoBehaviour
+public class GoogleAdMobController : AdvertisingServiceBase
 {
     private BannerView bannerView;
     private InterstitialAd interstitialAd;
@@ -27,7 +27,7 @@ public class GoogleAdMobController : MonoBehaviour
 
     #region UNITY MONOBEHAVIOR METHODS
 
-    public void Start()
+    public override void Init()
     {
         MobileAds.SetiOSAppPauseOnBackground(true);
 
@@ -95,7 +95,7 @@ public class GoogleAdMobController : MonoBehaviour
 
     #region BANNER ADS
 
-    public void RequestBannerAd()
+    public override void RequestBannerAd()
     {
         statusText.text = "Requesting Banner Ad.";
         // These ad units are configured to always serve test ads.
@@ -127,7 +127,7 @@ public class GoogleAdMobController : MonoBehaviour
         bannerView.LoadAd(CreateAdRequest());
     }
 
-    public void DestroyBannerAd()
+    public override void DestroyBannerAd()
     {
         if (bannerView != null)
         {
@@ -139,7 +139,7 @@ public class GoogleAdMobController : MonoBehaviour
 
     #region INTERSTITIAL ADS
 
-    public void RequestAndLoadInterstitialAd()
+    public override void RequestAndLoadInterstitialAd()
     {
         statusText.text = "Requesting Interstitial Ad.";
 #if UNITY_EDITOR
@@ -170,7 +170,7 @@ public class GoogleAdMobController : MonoBehaviour
         interstitialAd.LoadAd(CreateAdRequest());
     }
 
-    public void ShowInterstitialAd()
+    public override void ShowInterstitialAd()
     {
         if (interstitialAd.IsLoaded())
         {
@@ -182,7 +182,7 @@ public class GoogleAdMobController : MonoBehaviour
         }
     }
 
-    public void DestroyInterstitialAd()
+    public override void DestroyInterstitialAd()
     {
         if (interstitialAd != null)
         {
@@ -193,7 +193,7 @@ public class GoogleAdMobController : MonoBehaviour
 
     #region REWARDED ADS
 
-    public void RequestAndLoadRewardedAd()
+    public override void RequestAndLoadRewardedAd()
     {
         statusText.text = "Requesting Rewarded Ad.";
 #if UNITY_EDITOR
@@ -221,7 +221,7 @@ public class GoogleAdMobController : MonoBehaviour
         rewardedAd.LoadAd(CreateAdRequest());
     }
 
-    public void ShowRewardedAd()
+    public override void ShowRewardedAd()
     {
         if (rewardedAd != null)
         {
@@ -233,7 +233,7 @@ public class GoogleAdMobController : MonoBehaviour
         }
     }
 
-    public void RequestAndLoadRewardedInterstitialAd()
+    public override void RequestAndLoadRewardedInterstitialAd()
     {
         statusText.text = "Requesting Rewarded Interstitial Ad.";
         // These ad units are configured to always serve test ads.
@@ -287,7 +287,7 @@ public class GoogleAdMobController : MonoBehaviour
         });
     }
 
-    public void ShowRewardedInterstitialAd()
+    public override void ShowRewardedInterstitialAd()
     {
         if (rewardedInterstitialAd != null)
         {
