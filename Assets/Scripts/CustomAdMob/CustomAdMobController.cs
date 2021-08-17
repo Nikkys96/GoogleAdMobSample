@@ -67,38 +67,13 @@ public class CustomAdMobController : AdvertisingServiceBase
     private void HandleInitCompleteAction(InitializationStatus initStatus)
     {
         ExecuteInMainThread(() =>
-        {
-            StartCoroutine(InitAdapters(initStatus));
+        { 
+            Debug.LogError("init adapters success");
+            _isInitialized = true;
+
+            RequestAndLoadInterstitialAd();
+            RequestAndLoadRewardedAd();
         });
-    }
-
-    private IEnumerator InitAdapters(InitializationStatus initStatus)
-    {
-        Dictionary<string, AdapterStatus> adapters = initStatus.getAdapterStatusMap();
-        bool isAllNetworksReady = false;
-
-        while (!isAllNetworksReady)
-        {
-            isAllNetworksReady = true;
-            yield return new WaitForSeconds(1f);
-
-            foreach (KeyValuePair<string, AdapterStatus> keyValuePair in adapters)
-            {
-                string className = keyValuePair.Key;
-                AdapterStatus status = keyValuePair.Value;
-
-                if (status.InitializationState == AdapterState.NotReady)
-                {
-                    isAllNetworksReady = false;
-                    break;
-                }
-            }
-        }
-
-        _isInitialized = true;
-
-        RequestAndLoadInterstitialAd();
-        RequestAndLoadRewardedAd();
     }
 
     public override void RequestAndLoadInterstitialAd()
